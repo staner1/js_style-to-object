@@ -38,35 +38,24 @@ function convertToObject(sourceString) {
             .replaceAll('\t', '')
             .split('');
 
-          for (let i = 0; i < arrayLetters.length; i++) {
-            if (i === 0 && arrayLetters[i] === ' ') {
-              arrayLetters.splice(i, 1);
-              i--;
-              continue;
-            }
+          const firstNonSpaceIndex = arrayLetters.findIndex(
+            (char) => char !== ' ',
+          );
+          const lastNonSpaceIndex = arrayLetters.findLastIndex(
+            (char) => char !== ' ',
+          );
 
-            if (i === arrayLetters.length - 1 && arrayLetters[i] === ' ') {
-              newResult = newResult.slice(0, -1);
-              arrayLetters.splice(i, 1);
-              i -= 2;
-              continue;
-            }
-
-            newResult += arrayLetters[i];
-          }
+          newResult = arrayLetters
+            .slice(firstNonSpaceIndex, lastNonSpaceIndex + 1)
+            .join('');
         }
 
         if (arrayLetters.includes(',')) {
-          for (let i = 0; i < arrayLetters.length; i++) {
-            if (i === 0 && arrayLetters[i] === ' ') {
-              arrayLetters.splice(i, 1);
-              i--;
-              continue;
-            }
+          const filterCallback = (letter, index) => {
+            return index >= arrayLetters.findIndex((char) => char !== ' ');
+          };
 
-            newResult = arrayLetters.slice(0).join('');
-            break;
-          }
+          newResult = arrayLetters.filter(filterCallback).join('');
         }
 
         return newResult;
