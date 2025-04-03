@@ -22,40 +22,41 @@ function convertToObject(sourceString) {
       const valueResult = () => {
         const result = item.slice(brakeIndex + 1, item.length);
 
-        let arrayLetters = result.split('');
-
-        if (arrayLetters[0] === '\n') {
-          arrayLetters.splice(0, 1);
-        }
+        const symbols = result.split('');
 
         let newResult = '';
 
-        if (!arrayLetters.includes(',')) {
-          arrayLetters = arrayLetters
+        if (!symbols.includes(',')) {
+          const symbolsCleared = symbols
             .join('')
             .replaceAll('\n', '')
             .replaceAll('"', '')
             .replaceAll('\t', '')
             .split('');
 
-          const firstNonSpaceIndex = arrayLetters.findIndex(
+          const firstNonSpaceIndex = symbolsCleared.findIndex(
             (char) => char !== ' ',
           );
-          const lastNonSpaceIndex = arrayLetters.findLastIndex(
+          const lastNonSpaceIndex = symbolsCleared.findLastIndex(
             (char) => char !== ' ',
           );
 
-          newResult = arrayLetters
+          newResult = symbolsCleared
             .slice(firstNonSpaceIndex, lastNonSpaceIndex + 1)
             .join('');
         }
 
-        if (arrayLetters.includes(',')) {
+        if (symbols.includes(',')) {
           const filterCallback = (letter, index) => {
-            return index >= arrayLetters.findIndex((char) => char !== ' ');
+            return (
+              index >=
+              symbols.findIndex(
+                (char) => char !== ' ' && char !== '\n' && char !== '\t',
+              )
+            );
           };
 
-          newResult = arrayLetters.filter(filterCallback).join('');
+          newResult = symbols.filter(filterCallback).join('');
         }
 
         return newResult;
